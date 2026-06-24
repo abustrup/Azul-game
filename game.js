@@ -19,39 +19,55 @@ const wallColFor = (row, ci) => (row + ci) % 5;
 const colorIndexForWall = (row, col) => ((col - row) % 5 + 5) % 5;
 const colorForWall = (row, col) => COLORS[colorIndexForWall(row, col)];
 
-// ---------------- SVG tile faces (intricate, enameled) ----------------
-const STROKE = 'rgba(255,255,255,0.94)';
-const STROKE2 = 'rgba(255,255,255,0.55)';
+// ---------------- SVG tile faces — azulejo enameled ceramic motifs ----------------
+// Near-white painted stroke on a colored ceramic body (body color set in CSS).
+const STROKE  = 'rgba(255,255,255,0.95)';  // painted motif line
+const STROKE2 = 'rgba(255,255,255,0.5)';   // secondary / inner line
+const INK     = 'rgba(8,16,30,0.28)';      // etched shadow inside white fills
+
+// SUN — radiant compass sunburst (16 alternating rays, ringed white boss)
 function sunFace() {
   let rays = '';
   for (let i = 0; i < 16; i++) {
     const a = (i * 22.5) * Math.PI / 180;
-    const r1 = 18, r2 = i % 2 === 0 ? 42 : 33;
+    const r1 = 17, r2 = i % 2 === 0 ? 42 : 32;
     rays += `<line x1="${(50 + Math.cos(a) * r1).toFixed(1)}" y1="${(50 + Math.sin(a) * r1).toFixed(1)}" x2="${(50 + Math.cos(a) * r2).toFixed(1)}" y2="${(50 + Math.sin(a) * r2).toFixed(1)}"/>`;
   }
-  return `<svg viewBox="0 0 100 100" class="face"><g fill="none" stroke="${STROKE2}" stroke-width="1.4" stroke-linecap="round"><circle cx="50" cy="50" r="44"/></g><g fill="none" stroke="${STROKE}" stroke-width="3" stroke-linecap="round">${rays}</g><circle cx="50" cy="50" r="16" fill="rgba(255,255,255,0.96)"/><circle cx="50" cy="50" r="11" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="1"/><circle cx="50" cy="50" r="5" fill="rgba(0,0,0,0.28)"/></svg>`;
+  return `<svg viewBox="0 0 100 100" class="face"><circle cx="50" cy="50" r="45" fill="none" stroke="${STROKE2}" stroke-width="1.4"/><g fill="none" stroke="${STROKE}" stroke-width="3" stroke-linecap="round">${rays}</g><circle cx="50" cy="50" r="15" fill="${STROKE}"/><circle cx="50" cy="50" r="10" fill="none" stroke="${INK}" stroke-width="1.3"/><circle cx="50" cy="50" r="4.5" fill="${INK}"/></svg>`;
 }
+// FLOWER — eight-petal azulejo rosette
 function flowerFace() {
   let outer = '', inner = '', dots = '';
-  for (let i = 0; i < 8; i++) outer += `<ellipse cx="50" cy="26" rx="8" ry="20" transform="rotate(${i * 45} 50 50)"/>`;
-  for (let i = 0; i < 8; i++) inner += `<ellipse cx="50" cy="36" rx="4.5" ry="12" transform="rotate(${i * 45 + 22.5} 50 50)"/>`;
-  for (let i = 0; i < 8; i++) { const a = (i * 45) * Math.PI / 180; dots += `<circle cx="${(50 + Math.cos(a) * 14).toFixed(1)}" cy="${(50 + Math.sin(a) * 14).toFixed(1)}" r="1.2"/>`; }
-  return `<svg viewBox="0 0 100 100" class="face"><g fill="none" stroke="${STROKE}" stroke-width="2.5">${outer}</g><g fill="none" stroke="${STROKE2}" stroke-width="2">${inner}</g><g fill="${STROKE}">${dots}</g><circle cx="50" cy="50" r="9" fill="rgba(255,255,255,0.96)"/><circle cx="50" cy="50" r="3.5" fill="rgba(0,0,0,0.3)"/></svg>`;
+  for (let i = 0; i < 8; i++) outer += `<ellipse cx="50" cy="27" rx="7" ry="19" transform="rotate(${i * 45} 50 50)"/>`;
+  for (let i = 0; i < 8; i++) inner += `<ellipse cx="50" cy="37" rx="4" ry="11" transform="rotate(${i * 45 + 22.5} 50 50)"/>`;
+  for (let i = 0; i < 8; i++) { const a = (i * 45) * Math.PI / 180; dots += `<circle cx="${(50 + Math.cos(a) * 14).toFixed(1)}" cy="${(50 + Math.sin(a) * 14).toFixed(1)}" r="1.4"/>`; }
+  return `<svg viewBox="0 0 100 100" class="face"><g fill="none" stroke="${STROKE}" stroke-width="2.4">${outer}</g><g fill="none" stroke="${STROKE2}" stroke-width="1.8">${inner}</g><g fill="${STROKE}">${dots}</g><circle cx="50" cy="50" r="8.5" fill="${STROKE}"/><circle cx="50" cy="50" r="3.2" fill="${INK}"/></svg>`;
 }
+// LEAF — four-fold palmette cross with diagonal buds
 function leafFace() {
-  return `<svg viewBox="0 0 100 100" class="face"><g fill="none" stroke="${STROKE}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M50 12 C77 30 77 70 50 88 C23 70 23 30 50 12 Z"/><path d="M50 20 L50 80"/><path d="M50 35 C60 39 65 44 67 49"/><path d="M50 35 C40 39 35 44 33 49"/><path d="M50 50 C60 54 65 59 67 64"/><path d="M50 50 C40 54 35 59 33 64"/><path d="M50 65 C58 68 62 72 63 76"/><path d="M50 65 C42 68 38 72 37 76"/></g></svg>`;
+  let leaves = '', buds = '';
+  for (let i = 0; i < 4; i++) leaves += `<g transform="rotate(${i * 90} 50 50)"><path d="M50 49 C41 33 44 18 50 11 C56 18 59 33 50 49 Z"/><path d="M50 16 L50 45"/></g>`;
+  for (let i = 0; i < 4; i++) { const a = (i * 90 + 45) * Math.PI / 180; buds += `<circle cx="${(50 + Math.cos(a) * 23).toFixed(1)}" cy="${(50 + Math.sin(a) * 23).toFixed(1)}" r="3"/>`; }
+  return `<svg viewBox="0 0 100 100" class="face"><g fill="none" stroke="${STROKE}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">${leaves}</g><g fill="${STROKE2}">${buds}</g><circle cx="50" cy="50" r="6" fill="${STROKE}"/><circle cx="50" cy="50" r="2.2" fill="${INK}"/></svg>`;
 }
+// SHELL — the iconic Azul eight-point snowflake star
 function shellFace() {
-  let ribs = '', arcs = '';
-  for (let i = -3; i <= 3; i++) ribs += `<line x1="50" y1="86" x2="${50 + i * 9}" y2="25"/>`;
-  for (let i = -2; i <= 2; i++) arcs += `<path d="M${36 + i * 5} 60 Q50 ${50 + i * 2} ${64 - i * 5} 60"/>`;
-  return `<svg viewBox="0 0 100 100" class="face"><g fill="none" stroke="${STROKE}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M50 86 C18 86 14 38 50 20 C86 38 82 86 50 86 Z" stroke-width="3"/>${ribs}</g><g fill="none" stroke="${STROKE2}" stroke-width="1.4">${arcs}</g><circle cx="50" cy="86" r="4.6" fill="rgba(255,255,255,0.96)"/><circle cx="50" cy="86" r="2" fill="rgba(0,0,0,0.25)"/></svg>`;
+  let pts = '', inner = '';
+  for (let i = 0; i < 16; i++) { const a = (-90 + i * 22.5) * Math.PI / 180, r = i % 2 === 0 ? 40 : 16;
+    pts += `${(50 + Math.cos(a) * r).toFixed(1)},${(50 + Math.sin(a) * r).toFixed(1)} `; }
+  for (let i = 0; i < 16; i++) { const a = (-90 + i * 22.5) * Math.PI / 180, r = i % 2 === 0 ? 27 : 11;
+    inner += `${(50 + Math.cos(a) * r).toFixed(1)},${(50 + Math.sin(a) * r).toFixed(1)} `; }
+  return `<svg viewBox="0 0 100 100" class="face"><circle cx="50" cy="50" r="45" fill="none" stroke="${STROKE2}" stroke-width="1.2"/><polygon points="${pts.trim()}" fill="${STROKE}"/><polygon points="${inner.trim()}" fill="none" stroke="${INK}" stroke-width="1.2"/><circle cx="50" cy="50" r="4" fill="${INK}"/></svg>`;
 }
+// GEM — Moorish khatim eight-point star (obsidian sapphire, no purple)
 function gemFace() {
-  return `<svg viewBox="0 0 100 100" class="face"><g fill="none" stroke="${STROKE}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><polygon points="26,44 50,16 74,44 74,60 50,86 26,60"/><line x1="50" y1="16" x2="50" y2="44"/><line x1="26" y1="44" x2="50" y2="44"/><line x1="74" y1="44" x2="50" y2="44"/><polygon points="50,44 62,49 62,57 50,63 38,57 38,49"/><line x1="50" y1="44" x2="50" y2="63"/></g><g fill="none" stroke="${STROKE2}" stroke-width="1.2"><line x1="26" y1="44" x2="50" y2="63"/><line x1="74" y1="44" x2="50" y2="63"/><line x1="38" y1="49" x2="50" y2="44"/><line x1="62" y1="49" x2="50" y2="44"/></g></svg>`;
+  let oct = '';
+  for (let i = 0; i < 8; i++) { const a = i * 45 * Math.PI / 180; oct += `${(50 + Math.cos(a) * 16).toFixed(1)},${(50 + Math.sin(a) * 16).toFixed(1)} `; }
+  return `<svg viewBox="0 0 100 100" class="face"><g fill="none" stroke="${STROKE}" stroke-width="2.6" stroke-linejoin="round"><polygon points="50,11 89,50 50,89 11,50"/><polygon points="22,22 78,22 78,78 22,78"/></g><polygon points="${oct.trim()}" fill="none" stroke="${STROKE2}" stroke-width="1.6"/><g fill="none" stroke="${STROKE}" stroke-width="2"><polygon points="50,40 60,50 50,60 40,50"/></g><circle cx="50" cy="50" r="2.6" fill="${INK}"/></svg>`;
 }
 const FACE = { sun: sunFace, flower: flowerFace, leaf: leafFace, shell: shellFace, gem: gemFace };
-const starFace = () => `<svg viewBox="0 0 100 100" class="face"><path d="M50 12 L60 40 L90 42 L66 60 L75 88 L50 71 L25 88 L34 60 L10 42 L40 40 Z" fill="currentColor"/></svg>`;
+// First-player marker — gilt heraldic star on obsidian (color via currentColor)
+const starFace = () => `<svg viewBox="0 0 100 100" class="face"><path d="M50 13 L58.5 39.5 L86 40.5 L63.5 57 L72 84 L50 67.5 L28 84 L36.5 57 L14 40.5 L41.5 39.5 Z" fill="currentColor"/><circle cx="50" cy="50" r="5.5" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.6"/></svg>`;
 
 // ---------------- Icon glyphs (no emoji) ----------------
 const ICONS = {

@@ -17,12 +17,12 @@
   --cream: #efe7d2;
   --ink: #04130f;
 
-  /* jewel tile hues */
-  --t-sun-1:#fbd362; --t-sun-2:#e09a1e; --t-sun-3:#7d4f10;
-  --t-flower-1:#f06a82; --t-flower-2:#c6364c; --t-flower-3:#6f1b29;
-  --t-leaf-1:#54c98a; --t-leaf-2:#1f9358; --t-leaf-3:#0e4828;
-  --t-shell-1:#5fc0e0; --t-shell-2:#1f93c4; --t-shell-3:#0d4e6e;
-  --t-gem-1:#46587e; --t-gem-2:#222d4d; --t-gem-3:#080c1c;   /* obsidian sapphire (no purple) */
+  /* jewel tile hues — refined enamel: light highlight -> mid -> dark bevel edge */
+  --t-sun-1:#fbd66a; --t-sun-2:#e0a526; --t-sun-3:#6e4410;   /* saffron & amber */
+  --t-flower-1:#f26c82; --t-flower-2:#c42e45; --t-flower-3:#5c1722; /* coral vermilion */
+  --t-leaf-1:#58cf9a; --t-leaf-2:#18996a; --t-leaf-3:#0b4a33;       /* viridian green */
+  --t-shell-1:#5fcbe6; --t-shell-2:#1c92c8; --t-shell-3:#0a4e72;    /* azul turquoise */
+  --t-gem-1:#3f5681; --t-gem-2:#1a2746; --t-gem-3:#05091a;         /* obsidian sapphire (no purple) */
 
   --shadow-float: 0 30px 70px rgba(0,0,0,0.65), 0 8px 22px rgba(0,0,0,0.45);
 
@@ -280,8 +280,8 @@ html, body {
   z-index: 5;
 }
 .tile.first-token {
-  background: radial-gradient(120% 120% at 35% 28%, #3a4050, #121722 64%, #05070d);
-  box-shadow: inset 0 2px 1px rgba(255,255,255,.4), inset 0 -4px 6px rgba(0,0,0,.6), 0 7px 11px rgba(0,0,0,.6);
+  background: radial-gradient(120% 120% at 35% 28%, #3a4458, #121a28 62%, #05070d);
+  box-shadow: inset 0 2px 1px rgba(255,255,255,.4), inset 0 -4px 6px rgba(0,0,0,.6), inset 0 0 0 1px rgba(201,162,39,.35), 0 7px 11px rgba(0,0,0,.6);
 }
 .tile.first-token .face { color: var(--gold-bright); }
 .tile.placed { animation: tilePop .44s cubic-bezier(.2,1.4,.4,1) both; }
